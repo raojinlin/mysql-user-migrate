@@ -15,7 +15,7 @@ Go CLI 工具，用于将 MySQL 用户（用户名、密码/认证、Host、权�
 - 多目标：重复 `--target` 或在配置文件中提供 targets，一对多迁移可并发执行（`--concurrency`）。
 - 模式：`--dry-run` 生成计划与报告不落库；默认执行模式；`--drop-missing`/`--force-overwrite` 控制覆盖策略。
 - 报告：终端摘要 + `--report` 输出 JSON（含每个目标的结果）。
-- 安全：不记录明文密码，默认不迁移 root，需显式包含。
+- 安全：日志/报告中会脱敏 DSN 密码，默认不迁移 root，需显式包含。
 
 ## 配置文件 (YAML/JSON)
 参见 `config.example.yaml`，常用字段：

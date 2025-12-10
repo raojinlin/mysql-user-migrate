@@ -11,6 +11,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/go-sql-driver/mysql"
 	"github.com/raojinlin/mysql-user-migrate/internal/config"
 
 	_ "github.com/go-sql-driver/mysql" // register MySQL driver
@@ -51,7 +52,7 @@ func (r *Runner) Run(ctx context.Context) (*Report, error) {
 	r.Logger.Printf("loaded %d users from source", len(sourceUsers))
 
 	report := &Report{
-		Source:    r.SourceDSN,
+		Source:    maskDSN(r.SourceDSN),
 		DryRun:    r.DryRun,
 		StartedAt: time.Now(),
 	}
@@ -86,7 +87,7 @@ func (r *Runner) migrateTarget(ctx context.Context, users []UserRecord, target c
 	start := time.Now()
 	targetName := target.Name
 	if targetName == "" {
-		targetName = target.DSN
+		targetName = maskDSN(target.DSN)
 	}
 	result := TargetReport{
 		Target:    targetName,
@@ -344,4 +345,24 @@ func normalizePattern(p string) string {
 		p = strings.ReplaceAll(p, "**", "*")
 	}
 	return p
+}
+
+// maskDSN redacts password component in DSN for safe logging/reporting.
+func maskDSN(dsn string) string {
+	cfg, err := mysql.ParseDSN(dsn)
+	if err == nil {
+		cfg.Passwd = "****"
+		return cfg.FormatDSN()
+	}
+
+	// Fallback: naive masking user:pass@...
+	at := strings.Index(dsn, "@")
+	if at == -1 {
+		return dsn
+	}
+	before := dsn[:at]
+	if colon := strings.Index(before, ":"); colon != -1 {
+		before = before[:colon] + ":****"
+	}
+	return before + dsn[at:]
 }
