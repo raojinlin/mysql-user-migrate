@@ -1,0 +1,16 @@
+source: user:password@tcp(source-host:3306)/
+targets:
+  - name: staging
+    dsn: user:password@tcp(staging-host:3306)/
+  - name: backup
+    dsn: user:password@tcp(backup-host:3306)/
+include:
+  - app_user
+exclude:
+  - root
+dry_run: true
+drop_missing: false
+force_overwrite: false
+report_path: report.json
+concurrency: 2
+verbose: true
