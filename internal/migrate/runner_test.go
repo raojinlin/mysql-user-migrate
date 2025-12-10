@@ -18,7 +18,7 @@ func TestMatchIdentity(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := matchIdentity(tt.user, tt.host, tt.pattern)
+			got := MatchIdentity(tt.user, tt.host, tt.pattern)
 			if got != tt.want {
 				t.Fatalf("matchIdentity(%s, %s, %s) = %v, want %v", tt.user, tt.host, tt.pattern, got, tt.want)
 			}
@@ -45,7 +45,7 @@ func TestShouldInclude(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := shouldInclude(tt.user, tt.host, tt.include, tt.exclude)
+			got := ShouldInclude(tt.user, tt.host, tt.include, tt.exclude)
 			if got != tt.want {
 				t.Fatalf("shouldInclude(%s, %s) = %v, want %v", tt.user, tt.host, got, tt.want)
 			}
@@ -66,7 +66,7 @@ func TestMaskDSN(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := maskDSN(tt.dsn); got != tt.want {
+			if got := MaskDSN(tt.dsn); got != tt.want {
 				t.Fatalf("maskDSN(%s) = %s, want %s", tt.dsn, got, tt.want)
 			}
 		})
