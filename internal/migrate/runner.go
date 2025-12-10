@@ -52,7 +52,7 @@ func (r *Runner) Run(ctx context.Context) (*Report, error) {
 	r.Logger.Printf("loaded %d users from source", len(sourceUsers))
 
 	report := &Report{
-		Source:    maskDSN(r.SourceDSN),
+		Source:    MaskDSN(r.SourceDSN),
 		DryRun:    r.DryRun,
 		StartedAt: time.Now(),
 	}
@@ -87,7 +87,7 @@ func (r *Runner) migrateTarget(ctx context.Context, users []UserRecord, target c
 	start := time.Now()
 	targetName := target.Name
 	if targetName == "" {
-		targetName = maskDSN(target.DSN)
+		targetName = MaskDSN(target.DSN)
 	}
 	result := TargetReport{
 		Target:    targetName,
@@ -188,7 +188,7 @@ func (r *Runner) loadSourceUsers(ctx context.Context, db *sql.DB) ([]UserRecord,
 			return nil, err
 		}
 
-		if !shouldInclude(user, host, r.Include, r.Exclude) {
+		if !ShouldInclude(user, host, r.Include, r.Exclude) {
 			continue
 		}
 
@@ -270,11 +270,11 @@ func escape(value string) string {
 	return value
 }
 
-func shouldInclude(user, host string, include, exclude []string) bool {
+func ShouldInclude(user, host string, include, exclude []string) bool {
 	u := strings.ToLower(user)
 	h := strings.ToLower(host)
 	for _, ex := range exclude {
-		if matchIdentity(u, h, ex) {
+		if MatchIdentity(u, h, ex) {
 			return false
 		}
 	}
@@ -282,7 +282,7 @@ func shouldInclude(user, host string, include, exclude []string) bool {
 		return true
 	}
 	for _, inc := range include {
-		if matchIdentity(u, h, inc) {
+		if MatchIdentity(u, h, inc) {
 			return true
 		}
 	}
@@ -303,7 +303,7 @@ func openDB(ctx context.Context, dsn string) (*sql.DB, error) {
 	return db, nil
 }
 
-func matchIdentity(user, host, pattern string) bool {
+func MatchIdentity(user, host, pattern string) bool {
 	pattern = strings.TrimSpace(strings.ToLower(pattern))
 	if pattern == "" {
 		return false
@@ -348,7 +348,7 @@ func normalizePattern(p string) string {
 }
 
 // maskDSN redacts password component in DSN for safe logging/reporting.
-func maskDSN(dsn string) string {
+func MaskDSN(dsn string) string {
 	cfg, err := mysql.ParseDSN(dsn)
 	if err == nil {
 		cfg.Passwd = "****"
