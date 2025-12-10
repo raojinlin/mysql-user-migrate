@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"path"
 	"strings"
 	"sync"
 	"time"
@@ -269,13 +270,10 @@ func escape(value string) string {
 }
 
 func shouldInclude(user, host string, include, exclude []string) bool {
-	identity := strings.ToLower(fmt.Sprintf("%s@%s", user, host))
+	u := strings.ToLower(user)
+	h := strings.ToLower(host)
 	for _, ex := range exclude {
-		ex = strings.ToLower(strings.TrimSpace(ex))
-		if ex == "" {
-			continue
-		}
-		if ex == strings.ToLower(user) || ex == identity {
+		if matchIdentity(u, h, ex) {
 			return false
 		}
 	}
@@ -283,11 +281,7 @@ func shouldInclude(user, host string, include, exclude []string) bool {
 		return true
 	}
 	for _, inc := range include {
-		inc = strings.ToLower(strings.TrimSpace(inc))
-		if inc == "" {
-			continue
-		}
-		if inc == strings.ToLower(user) || inc == identity {
+		if matchIdentity(u, h, inc) {
 			return true
 		}
 	}
@@ -306,4 +300,48 @@ func openDB(ctx context.Context, dsn string) (*sql.DB, error) {
 		return nil, err
 	}
 	return db, nil
+}
+
+func matchIdentity(user, host, pattern string) bool {
+	pattern = strings.TrimSpace(strings.ToLower(pattern))
+	if pattern == "" {
+		return false
+	}
+	userPat := pattern
+	hostPat := ""
+	if strings.Contains(pattern, "@") {
+		parts := strings.SplitN(pattern, "@", 2)
+		userPat = parts[0]
+		hostPat = parts[1]
+	}
+	if !matchGlob(user, userPat) {
+		return false
+	}
+	if hostPat == "" {
+		return true
+	}
+	return matchGlob(host, hostPat)
+}
+
+func matchGlob(value, pattern string) bool {
+	pattern = normalizePattern(pattern)
+	if pattern == "" {
+		return false
+	}
+	if pattern == "*" {
+		return true
+	}
+	ok, err := path.Match(pattern, value)
+	if err != nil {
+		return pattern == value
+	}
+	return ok
+}
+
+func normalizePattern(p string) string {
+	p = strings.ReplaceAll(p, "%", "*")
+	for strings.Contains(p, "**") {
+		p = strings.ReplaceAll(p, "**", "*")
+	}
+	return p
 }

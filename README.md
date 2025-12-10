@@ -11,7 +11,7 @@ Go CLI 工具，用于将 MySQL 用户（用户名、密码/认证、Host、权�
   `go run ./cmd/mysql-user-migrate --config config.example.yaml`
 
 ## 主要特性
-- 用户筛选：`--include user1,user2`，`--exclude root,test`，支持 user@host。
+- 用户筛选：`--include user1,user2`，`--exclude root,test`，支持通配符（如 `mysql.*`）、host 模式（如 `app@10.0.%`）。
 - 多目标：重复 `--target` 或在配置文件中提供 targets，一对多迁移可并发执行（`--concurrency`）。
 - 模式：`--dry-run` 生成计划与报告不落库；默认执行模式；`--drop-missing`/`--force-overwrite` 控制覆盖策略。
 - 报告：终端摘要 + `--report` 输出 JSON（含每个目标的结果）。
