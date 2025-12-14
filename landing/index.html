@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mysql-user-migrate | Landing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #05060a;
+      --bg-muted: rgba(255, 255, 255, 0.06);
+      --card: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.12);
+      --text: #e6eaf4;
+      --text-muted: rgba(230, 234, 244, 0.7);
+      --accent: #4d7cfe;
+      --accent-strong: #9f6bff;
+      --shadow: 0 35px 120px rgba(8, 14, 35, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #1c1f2b, #05060a 65%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    main {
+      padding: 0 6vw 6rem;
+    }
+
+    header {
+      padding: 2.5rem 6vw 4rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 4rem;
+    }
+
+    .nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05rem;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .logo-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      display: grid;
+      place-items: center;
+      font-size: 1.15rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 5vw, 4.8rem);
+      margin: 0 0 1.2rem;
+      line-height: 1.1;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.9rem 1.6rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+      color: #fff;
+      box-shadow: 0 25px 55px rgba(77, 124, 254, 0.3);
+    }
+
+    .btn-secondary {
+      border-color: var(--border);
+      color: var(--text);
+      background: transparent;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero-panel {
+      padding: 2rem;
+      border-radius: 24px;
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-panel pre {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #d2dbff;
+      overflow-x: auto;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05rem;
+    }
+
+    section {
+      margin-top: 5rem;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      padding: 1.8rem;
+      border-radius: 22px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: 0 30px 80px rgba(5, 6, 10, 0.45);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .card span {
+      font-size: 0.9rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08rem;
+      display: inline-block;
+      margin-bottom: 0.6rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .stat {
+      padding: 1.6rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg-muted);
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      align-items: center;
+    }
+
+    ul.timeline {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-left: 2px solid var(--border);
+    }
+
+    ul.timeline li {
+      padding-left: 1.5rem;
+      position: relative;
+      margin-bottom: 1.4rem;
+    }
+
+    ul.timeline li::before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: var(--bg);
+      left: -7px;
+      top: 0.35rem;
+    }
+
+    .quote {
+      padding: 2.4rem;
+      border-radius: 24px;
+      background: linear-gradient(145deg, rgba(77, 124, 254, 0.18), rgba(9, 9, 12, 0.9));
+      border: 1px solid rgba(77, 124, 254, 0.3);
+      font-size: 1.1rem;
+    }
+
+    .code-block {
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-family: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      padding: 3rem 6vw 4rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 5rem;
+    }
+
+    footer p {
+      color: var(--text-muted);
+      margin: 0.2rem 0;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel {
+        order: -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="logo">
+        <div class="logo-badge">μm</div>
+        mysql-user-migrate
+      </div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#cli">CLI</a>
+        <a href="https://github.com/raojinlin/mysql-user-migrate" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="index-zh.html">中文</a>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <div>
+        <div class="pill">Source → Targets · Filters built-in</div>
+        <h1>
+          Migrate MySQL users with<br />
+          filters, dry-runs, and reports.
+        </h1>
+        <p>
+          mysql-user-migrate is a Go CLI that copies username/auth/host/privileges from a single source into one or many targets.
+          It ships with include/exclude wildcards, concurrent targets, dry-run planning, JSON reports, and overwrite controls.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="https://github.com/raojinlin/mysql-user-migrate" target="_blank" rel="noreferrer">View on GitHub</a>
+          <a class="btn btn-secondary" href="#cli">Run the CLI</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <pre><code>$ go run ./cmd/mysql-user-migrate \
+  --source "user:pass@tcp(src:3306)/" \
+  --target "name=stg=user:pass@tcp(stg:3306)/" \
+  --include app_* \
+  --dry-run --report report.json
+✔ plan ready: 1 create · 0 updates · 0 drops
+→ remove --dry-run to apply</code></pre>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="features">
+      <div class="section-heading">
+        <h2>Everything you need to migrate users</h2>
+        <p class="text-muted">All copy comes directly from the documented CLI capabilities.</p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <span>Filtering</span>
+          <h3>Include / exclude</h3>
+          <p>Use <code>--include</code>/<code>--exclude</code> with wildcards like <code>app@10.0.%</code> so only the right users move.</p>
+        </article>
+        <article class="card">
+          <span>One-to-many</span>
+          <h3>Multiple targets</h3>
+          <p>Repeat <code>--target</code> or define them in config; <code>--concurrency</code> migrates several destinations in parallel.</p>
+        </article>
+        <article class="card">
+          <span>Modes</span>
+          <h3>Dry-run & reports</h3>
+          <p><code>--dry-run</code> plans without changes, while <code>--report</code> emits JSON for CI pipelines and audits.</p>
+        </article>
+        <article class="card">
+          <span>Safety</span>
+          <h3>Overwrite controls</h3>
+          <p><code>--drop-missing</code> and <code>--force-overwrite</code> keep targets clean; secrets stay masked in logs.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <h2>Essentials at a glance</h2>
+        <p class="text-muted">Straight from the quick start in README.</p>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <strong>1 → N</strong>
+          <span>Sync one source into many named targets</span>
+        </div>
+        <div class="stat">
+          <strong>--dry-run</strong>
+          <span>Plan-only mode with summary output</span>
+        </div>
+        <div class="stat">
+          <strong>JSON</strong>
+          <span><code>--report report.json</code> for CI and audits</span>
+        </div>
+        <div class="stat">
+          <strong>Masked</strong>
+          <span>Passwords never printed in logs or reports</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="workflow">
+      <div class="grid-two">
+        <div>
+          <div class="section-heading">
+            <h2>Opinionated workflow</h2>
+          </div>
+          <ul class="timeline">
+            <li>
+              <h3>1 · Connect</h3>
+              <p>Pass <code>--source</code> and repeatable <code>--target</code> flags or load them via <code>config.example.yaml</code>.</p>
+            </li>
+            <li>
+              <h3>2 · Filter</h3>
+              <p>Use <code>--include</code>/<code>--exclude</code> with usernames or <code>user@host</code> patterns to scope the run.</p>
+            </li>
+            <li>
+              <h3>3 · Plan</h3>
+              <p>Run with <code>--dry-run</code> to view the summary, optional JSON report, and validate overwrite settings.</p>
+            </li>
+            <li>
+              <h3>4 · Apply</h3>
+              <p>Drop the dry-run flag, optionally enable <code>--drop-missing</code> or <code>--force-overwrite</code>, and watch the logs.</p>
+            </li>
+          </ul>
+        </div>
+        <div class="quote">
+          <strong>Operational notes</strong>
+          <p>
+            <code>make deps</code> keeps Go modules tidy, <code>make fmt</code> formats code, and <code>make run ARGS="..."</code> wraps the CLI.
+            Secrets stay redacted in logs, and root/system accounts stay untouched unless explicitly included.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="cli">
+      <div class="grid-two">
+        <div>
+          <div class="section-heading">
+            <h2>Ready-to-run CLI</h2>
+          </div>
+          <p>
+            Configure via environment variables or <code>config.example.yaml</code>.
+            The CLI keeps secrets off logs, honors <code>context.Context</code>, and plays well with CI/CD.
+          </p>
+          <div class="cards">
+            <article class="card">
+              <h3>Local iteration</h3>
+              <p><code>make deps</code>, <code>make fmt</code>, and <code>make lint</code> keep the codebase tidy.</p>
+            </article>
+            <article class="card">
+              <h3>Integration checks</h3>
+              <p><code>make itest</code> executes <code>docker-compose -f docker-compose.test.yml</code> so you can exercise migrations end-to-end.</p>
+            </article>
+          </div>
+        </div>
+        <div class="code-block">
+<pre><code># .env
+SOURCE_DB_URI=mysql://readonly:***@dev-db:3306
+TARGET_DB_URI=mysql://admin:***@prod-db:3306
+
+# Run
+make run ARGS="--source $SOURCE_DB_URI \
+  --target $TARGET_DB_URI \
+  --apply"</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid-two">
+        <div>
+          <div class="section-heading">
+            <h2>Built for teams</h2>
+          </div>
+          <p>Single Go binary, explicit flags, and config files so every migration is reviewable.</p>
+          <ul class="timeline">
+            <li>
+              <h3>Config-first</h3>
+              <p>Ship <code>source</code>, <code>targets</code>, and filters in YAML/JSON just like <code>config.example.yaml</code>.</p>
+            </li>
+            <li>
+              <h3>Concurrent targets</h3>
+              <p><code>--concurrency</code> lets you update multiple destinations at once with bounded workers.</p>
+            </li>
+            <li>
+              <h3>CI friendly</h3>
+              <p>Combine <code>--dry-run</code>, <code>--report</code>, and exit codes to gate releases.</p>
+            </li>
+          </ul>
+        </div>
+        <div class="hero-panel">
+          <h3>Command Palette</h3>
+          <p>Common recipes</p>
+          <pre><code>Dry-run a subset
+  make run ARGS="--include app_* --dry-run"
+
+Target multiple envs
+  make run ARGS="--target name=stg=dsn \
+                 --target name=prod=dsn \
+                 --concurrency 2"
+
+Produce a JSON report
+  make run ARGS="--dry-run --report report.json"</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid-two">
+        <div>
+          <div class="section-heading">
+            <h2>Launch mysql-user-migrate today</h2>
+          </div>
+          <p>
+            Stop diffing grants by hand. Use the CLI’s include/exclude filters, dry-run summaries, and JSON reports to prove every change before you apply it.
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="https://github.com/raojinlin/mysql-user-migrate" target="_blank" rel="noreferrer">Get the code</a>
+            <a class="btn btn-secondary" href="mailto:raojinlin302@gmail.com">Talk to the team</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>mysql-user-migrate · MIT License · Crafted for data platform teams.</p>
+    <p>Need help? Start with <code>REQUIREMENTS.md</code> then run <code>make run</code>.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mysql-user-migrate | 中文落地页</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #05060a;
+      --bg-muted: rgba(255, 255, 255, 0.06);
+      --card: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.12);
+      --text: #e6eaf4;
+      --text-muted: rgba(230, 234, 244, 0.7);
+      --accent: #4d7cfe;
+      --accent-strong: #9f6bff;
+      --shadow: 0 35px 120px rgba(8, 14, 35, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #1c1f2b, #05060a 65%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    main {
+      padding: 0 6vw 6rem;
+    }
+
+    header {
+      padding: 2.5rem 6vw 4rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 4rem;
+    }
+
+    .nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05rem;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .logo-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      display: grid;
+      place-items: center;
+      font-size: 1.15rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 5vw, 4.8rem);
+      margin: 0 0 1.2rem;
+      line-height: 1.1;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.9rem 1.6rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+      color: #fff;
+      box-shadow: 0 25px 55px rgba(77, 124, 254, 0.3);
+    }
+
+    .btn-secondary {
+      border-color: var(--border);
+      color: var(--text);
+      background: transparent;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero-panel {
+      padding: 2rem;
+      border-radius: 24px;
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-panel pre {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #d2dbff;
+      overflow-x: auto;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05rem;
+    }
+
+    section {
+      margin-top: 5rem;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      padding: 1.8rem;
+      border-radius: 22px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: 0 30px 80px rgba(5, 6, 10, 0.45);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .card span {
+      font-size: 0.85rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08rem;
+      display: inline-block;
+      margin-bottom: 0.6rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .stat {
+      padding: 1.6rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg-muted);
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      align-items: center;
+    }
+
+    ul.timeline {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-left: 2px solid var(--border);
+    }
+
+    ul.timeline li {
+      padding-left: 1.5rem;
+      position: relative;
+      margin-bottom: 1.4rem;
+    }
+
+    ul.timeline li::before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      background: var(--bg);
+      left: -7px;
+      top: 0.35rem;
+    }
+
+    .quote {
+      padding: 2.4rem;
+      border-radius: 24px;
+      background: linear-gradient(145deg, rgba(77, 124, 254, 0.18), rgba(9, 9, 12, 0.9));
+      border: 1px solid rgba(77, 124, 254, 0.3);
+      font-size: 1.1rem;
+    }
+
+    .code-block {
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-family: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      padding: 3rem 6vw 4rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      margin-top: 5rem;
+    }
+
+    footer p {
+      color: var(--text-muted);
+      margin: 0.2rem 0;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel {
+        order: -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="logo">
+        <div class="logo-badge">μm</div>
+        mysql-user-migrate
+      </div>
+      <div class="nav-links">
+        <a href="#features">特性</a>
+        <a href="#workflow">流程</a>
+        <a href="#cli">CLI</a>
+        <a href="https://github.com/raojinlin/mysql-user-migrate" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="index.html">English</a>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <div>
+        <div class="pill">一源多目标 · Flag 即配置</div>
+        <h1>用 CLI 精准迁移 MySQL 用户</h1>
+        <p>
+          mysql-user-migrate 是用 Go 编写的 CLI，可将用户名、认证方式、主机和权限从单一来源同步到一个或多个目标实例。
+          它内建 include/exclude 通配、并发多目标、Dry-run 规划、JSON 报告以及覆盖策略控制等能力。
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="https://github.com/raojinlin/mysql-user-migrate" target="_blank" rel="noreferrer">查看 GitHub</a>
+          <a class="btn btn-secondary" href="#cli">运行 CLI</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <pre><code>$ go run ./cmd/mysql-user-migrate \
+  --source "user:pass@tcp(src:3306)/" \
+  --target "name=stg=user:pass@tcp(stg:3306)/" \
+  --include app_* \
+  --dry-run --report report.json
+✔ 计划完成：1 创建 · 0 更新 · 0 删除
+→ 移除 --dry-run 后执行</code></pre>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="features">
+        <div class="section-heading">
+          <h2>项目现有能力</h2>
+          <p class="text-muted">以下功能都在 README 与 CLI flag 中明示。</p>
+        </div>
+      <div class="cards">
+        <article class="card">
+          <span>Filtering</span>
+          <h3>按需挑选</h3>
+          <p>通过 <code>--include</code>/<code>--exclude</code> 和 <code>app@10.0.%</code> 这类通配模式，只同步需要的账号。</p>
+        </article>
+        <article class="card">
+          <span>One-to-many</span>
+          <h3>多目标同步</h3>
+          <p>重复传入 <code>--target</code> 或写入配置文件，并用 <code>--concurrency</code> 控制同时迁移的数量。</p>
+        </article>
+        <article class="card">
+          <span>Modes</span>
+          <h3>Dry-run + 报告</h3>
+          <p><code>--dry-run</code> 只生成计划，<code>--report</code> 输出 JSON，方便接入 CI 或审计。</p>
+        </article>
+        <article class="card">
+          <span>Safety</span>
+          <h3>覆盖策略</h3>
+          <p><code>--drop-missing</code>、<code>--force-overwrite</code> 控制清理逻辑，日志默认对密码脱敏。</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+        <div class="section-heading">
+          <h2>关键信息一眼掌握</h2>
+          <p class="text-muted">完整对齐 README Quick start。</p>
+        </div>
+      <div class="stats">
+        <div class="stat">
+          <strong>1 → N</strong>
+          <span>单一来源同步到多个命名目标</span>
+        </div>
+        <div class="stat">
+          <strong>--dry-run</strong>
+          <span>计划模式输出概要</span>
+        </div>
+        <div class="stat">
+          <strong>JSON</strong>
+          <span><code>--report report.json</code> 可用于审核或 CI</span>
+        </div>
+        <div class="stat">
+          <strong>Masked</strong>
+          <span>日志与报告中密码默认脱敏</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="workflow">
+      <div class="grid-two">
+        <div>
+          <div class="section-heading">
+            <h2>约定好的工作流</h2>
+          </div>
+          <ul class="timeline">
+            <li>
+              <h3>1 · Connect</h3>
+              <p>透过 <code>--source</code> 与可重复的 <code>--target</code>，或直接引用 <code>config</code> 文件，声明连接。</p>
+            </li>
+            <li>
+              <h3>2 · Filter</h3>
+              <p>利用 <code>--include</code>/<code>--exclude</code> 及 <code>user@host</code> 表达式，只迁移需要的用户。</p>
+            </li>
+            <li>
+              <h3>3 · Plan</h3>
+              <p>加上 <code>--dry-run</code> 查看概要或生成 JSON 报告，确认覆盖策略与范围。</p>
+            </li>
+            <li>
+              <h3>4 · Apply</h3>
+              <p>移除 Dry-run，按需启用 <code>--drop-missing</code> 或 <code>--force-overwrite</code>，并关注日志结果。</p>
+            </li>
+          </ul>
+        </div>
+        <div class="quote">
+          <strong>操作提示</strong>
+          <p>
+            <code>make deps</code> 管理依赖，<code>make fmt</code> 统一格式，<code>make run ARGS="..."</code> 便于快速调用 CLI。
+            日志会自动脱敏密码，系统账号不会被迁移，除非显式 include。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="cli">
+      <div class="grid-two">
+        <div>
+          <div class="section-heading">
+            <h2>即开即用的 CLI</h2>
+          </div>
+          <p>
+            可通过环境变量或 <code>config.example.yaml</code> 注入参数。
+            CLI 遵守 <code>context.Context</code>，默认不输出敏感信息，也易于放入 CI/CD。
+          </p>
+          <div class="cards">
+            <article class="card">
+              <h3>本地迭代</h3>
+              <p><code>make deps</code>、<code>make fmt</code>、<code>make lint</code> 帮你保持代码整洁。</p>
+            </article>
+            <article class="card">
+              <h3>集成校验</h3>
+              <p><code>make itest</code> 会执行 <code>docker-compose -f docker-compose.test.yml ...</code>，支持端到端校验。</p>
+            </article>
+          </div>
+        </div>
+        <div class="code-block">
+<pre><code># .env
+SOURCE_DB_URI=mysql://readonly:***@dev-db:3306
+TARGET_DB_URI=mysql://admin:***@prod-db:3306
+
+# 运行
+make run ARGS="--source $SOURCE_DB_URI \
+  --target $TARGET_DB_URI \
+  --apply"</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid-two">
+        <div>
+          <div class="section-heading">
+            <h2>团队友好</h2>
+          </div>
+          <p>单一 Go 二进制搭配配置文件，让每次迁移都可追溯。</p>
+          <ul class="timeline">
+            <li>
+              <h3>配置优先</h3>
+              <p>按 <code>config.example.yaml</code> 的结构声明 <code>source</code>、<code>targets</code> 与过滤规则。</p>
+            </li>
+            <li>
+              <h3>并发目标</h3>
+              <p><code>--concurrency</code> 控制同时处理的目标数，在吞吐与可控之间取得平衡。</p>
+            </li>
+            <li>
+              <h3>CI 友好</h3>
+              <p>结合 <code>--dry-run</code>、<code>--report</code> 与退出码，在流水线中做变更准入。</p>
+            </li>
+          </ul>
+        </div>
+        <div class="hero-panel">
+          <h3>常用命令</h3>
+          <p>即时参考</p>
+          <pre><code>Dry-run 子集
+  make run ARGS="--include app_* --dry-run"
+
+同时推多目标
+  make run ARGS="--target name=stg=dsn \
+                 --target name=prod=dsn \
+                 --concurrency 2"
+
+生成 JSON 报告
+  make run ARGS="--dry-run --report report.json"</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid-two">
+        <div>
+          <div class="section-heading">
+            <h2>立即启用 mysql-user-migrate</h2>
+          </div>
+          <p>
+            告别手工对比授权。依靠 include/exclude 过滤、Dry-run 汇总和 JSON 报告，在执行前就让所有变更透明。
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="https://github.com/raojinlin/mysql-user-migrate" target="_blank" rel="noreferrer">获取代码</a>
+            <a class="btn btn-secondary" href="mailto:raojinlin302@gmail.com">与我们交流</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>mysql-user-migrate · MIT License · 为数据平台团队打造。</p>
+    <p>需要帮助？先阅读 <code>REQUIREMENTS.md</code>，然后运行 <code>make run</code>。</p>
+  </footer>
+</body>
+</html>
